@@ -1,0 +1,4 @@
+TIPO_IDENTIFICACION_EQUIFAX_CHOICES = (
+    ('C', 'CEDULA'),
+    ('R', 'RUC'),
+)
