@@ -1,4 +1,3 @@
-from rest_framework.parsers import JSONParser  # Añadir esto
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
@@ -23,6 +22,14 @@ from buro.serializers.consulta_buro_serializers import (
     ConsultaBuroResponseSerializer,
     ConsultaBuroFilterSerializer,
     ConsultaBuroOptDocSerializer,
+)
+
+import requests
+from buro.helpers.sanitize_equifax_data_helper import SanitizeEquifaxDataHelper
+from backend.settings import (
+    EQUIFAX_SERVICE_API_URL,
+    EQUIFAX_API_USERNAME,
+    EQUIFAX_API_PASSWORD,
 )
 
 
@@ -110,9 +117,20 @@ def consulta_buro(request):
     data = request.data
     valid_data = ConsultaBuroSerializer(data=data)
     if valid_data.is_valid():
-        valid_data.save()
+        validated_data = valid_data.validated_data
+        identificacion = validated_data.get("identificacion")
+        tipo_identificacion = validated_data.get("tipo_identificacion")
 
         # consultar al servicio de equifax ---------------------
+        url_equifax = f"{EQUIFAX_SERVICE_API_URL}/get-default-score?numeroDocumento={identificacion}&tipoDocumento={tipo_identificacion}"
+        headers = {
+            "Content-Type": "application/json",
+        }
+        response = requests.get(
+            url_equifax, headers=headers, auth=(EQUIFAX_API_USERNAME, EQUIFAX_API_PASSWORD))
+        response_data = response.json()
+
+        valid_data.save()
 
         return Response(valid_data.data, status=status.HTTP_201_CREATED)
 

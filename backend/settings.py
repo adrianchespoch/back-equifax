@@ -283,3 +283,9 @@ CACHES = {
     }
 }
 
+
+
+# ENVS ---------------
+EQUIFAX_API_USERNAME = os.environ.get('EQUIFAX_API_USERNAME')
+EQUIFAX_SERVICE_API_URL = os.environ.get('EQUIFAX_SERVICE_API_URL')
+EQUIFAX_API_PASSWORD = os.environ.get('EQUIFAX_API_PASSWORD')
