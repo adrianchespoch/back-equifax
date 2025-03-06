@@ -1,0 +1,43 @@
+asgiref==3.8.1
+dependency-injector==4.41.0
+django==5.1.1
+django-cors-headers==4.4.0
+django-filter==24.3
+djangorestframework==3.15.2
+djangorestframework-simplejwt==5.3.1
+drf-yasg==1.21.7
+inflection==0.5.1
+packaging==24.0
+pillow==10.3.0
+psycopg2-binary==2.9.9
+PyJWT==2.8.0
+python-dotenv==1.0.1
+pytz==2024.1
+PyYAML==6.0.1
+six==1.16.0
+sqlparse==0.5.0
+uritemplate==4.1.1
+django-redis==5.4.0
+# django-crontab==0.7.1
+# requests==2.32.3
+# WeasyPrint==62.3
+# openpyxl==3.1.5
+# boto3
+
+
+
+## django==5.1.1 
+## djangorestframework==3.15.2
+## djangorestframework-simplejwt==5.3.1
+## django-cors-headers==4.4.0
+## django-filter==24.3
+## django-redis==5.4.0
+## django-crontab==0.7.1
+## drf-yasg==1.21.7
+## requests==2.32.3
+## WeasyPrint==62.3
+## openpyxl==3.1.5
+## psycopg2-binary==2.9.9
+# openai==1.43.0
+# python-dotenv==1.0.1
+# boto3
