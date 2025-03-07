@@ -26,6 +26,7 @@ from buro.serializers.consulta_buro_serializers import (
 
 import requests
 from buro.helpers.sanitize_equifax_data_helper import SanitizeEquifaxDataHelper
+from buro.helpers.equifax_api_helper import EquifaxAPIHelper
 from backend.settings import (
     EQUIFAX_SERVICE_API_URL,
     EQUIFAX_API_USERNAME,

@@ -22,11 +22,22 @@ class GeneralAPIViewService(APIView, PermissionRequiredMixin):
 
     # main methods =================
     def get(self, request):
-        filter_params, page_number, page_size = get_pagination_parameters_rest(request)
+        filter_params, page_number, page_size = get_pagination_parameters_rest(
+            request)
         serialized_instances = self.service.find_all(
             filter_params, page_number, page_size
         )
-        return Response(serialized_instances, status=status.HTTP_200_OK)
+        return Response({
+            'status': status.HTTP_200_OK,
+            'message': 'Elementos encontrados',
+            'data': {
+                'meta': {
+                    'page_number': page_number,
+                    'page_size': page_size,
+                    'total_elements': self.service.count(filter_params)
+                }
+            }
+        }, status=status.HTTP_200_OK)
 
     def post(self, request):
         try:
@@ -51,7 +62,11 @@ class GeneralDetailAPIViewService(APIView, PermissionRequiredMixin):
     def get(self, request, pk):
         try:
             serialized_instance = self.service.find_one(pk)
-            return Response(serialized_instance, status=status.HTTP_200_OK)
+            return Response({
+                'status': status.HTTP_200_OK,
+                'message': 'Elemento encontrado',
+                'data': serialized_instance
+            }, status=status.HTTP_200_OK)
         except Exception as e:
             return self.handle_exception(e)
 
