@@ -43,22 +43,22 @@ schema_view = get_schema_view(
 
 urlpatterns = [
     # ### Swagger
-    re_path(r'^consultas-api-py/v1/swagger(?P<format>\.json|\.yaml)$',
+    re_path(r'^externo-consultas/v1/swagger(?P<format>\.json|\.yaml)$',
             schema_view.without_ui(cache_timeout=0), name='schema-json'),
-    path('consultas-api-py/v1/swagger/', schema_view.with_ui('swagger',
+    path('externo-consultas/v1/swagger/', schema_view.with_ui('swagger',
          cache_timeout=0), name='schema-swagger-ui'),
-    path('consultas-api-py/v1/redoc/', schema_view.with_ui('redoc',
+    path('externo-consultas/v1/redoc/', schema_view.with_ui('redoc',
          cache_timeout=0), name='schema-redoc'),
 
 
     # ### Admin
-    path('admin/', admin.site.urls),
+    path('externo-consultas/v1/admin/', admin.site.urls),
 
 
     # ### API
     # ## set v1 as version: no se puede colocar 1 prefix generico como en spring o nestjs
-    path('consultas-api-py/v1/users/', include('users.urls')),
+    path('externo-consultas/v1/users/', include('users.urls')),
 
-    path("consultas-api-py/v1/consulta-buro/", include("buro.urls.consulta_buro_urls")),
+    path("externo-consultas/v1/consulta-buro/", include("buro.urls.consulta_buro_urls")),
 
 ]
