@@ -1,6 +1,7 @@
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
+from django.db import transaction
 
 # ## docs openapi
 from drf_yasg.utils import swagger_auto_schema
@@ -24,14 +25,14 @@ from buro.serializers.consulta_buro_serializers import (
     ConsultaBuroOptDocSerializer,
 )
 
-import requests
 from buro.helpers.sanitize_equifax_data_helper import SanitizeEquifaxDataHelper
 from buro.helpers.equifax_api_helper import EquifaxAPIHelper
 from backend.settings import (
     EQUIFAX_SERVICE_API_URL,
-    EQUIFAX_API_USERNAME,
-    EQUIFAX_API_PASSWORD,
+    STAGE,
 )
+from backend.shared.exceptions.custom_generic_exception import CustomGenericException
+from backend.shared.helpers.handle_rest_exception_helper import handle_rest_exception_helper
 
 
 class ConsultaBuroView(GeneralAPIView):
@@ -114,25 +115,36 @@ class ConsultaBuroDetailView(GeneralDetailAPIView):
     },
 )
 @api_view(["POST"])
+@transaction.atomic
 def consulta_buro(request):
-    data = request.data
-    valid_data = ConsultaBuroSerializer(data=data)
-    if valid_data.is_valid():
-        validated_data = valid_data.validated_data
-        identificacion = validated_data.get("identificacion")
-        tipo_identificacion = validated_data.get("tipo_identificacion")
+    try:
+        data = request.data
+        serializer = ConsultaBuroSerializer(data=data)
+        if serializer.is_valid():
+            validated_data = serializer.validated_data
+            identificacion = validated_data.get("identificacion")
+            tipo_identificacion = validated_data.get("tipo_identificacion")
 
-        # consultar al servicio de equifax ---------------------
-        url_equifax = f"{EQUIFAX_SERVICE_API_URL}/get-default-score?numeroDocumento={identificacion}&tipoDocumento={tipo_identificacion}"
-        headers = {
-            "Content-Type": "application/json",
-        }
-        response = requests.get(
-            url_equifax, headers=headers, auth=(EQUIFAX_API_USERNAME, EQUIFAX_API_PASSWORD))
-        response_data = response.json()
+            # consultar al servicio de equifax ---------------------
+            json_res = EquifaxAPIHelper.request_score(
+                identificacion=identificacion,
+                tipo_identificacion=tipo_identificacion,
+                environment=STAGE,
+            )
+            sanitized_data = SanitizeEquifaxDataHelper.transform_object(
+                json_res)
 
-        valid_data.save()
+            # guardar en la base de datos ---------------------
+            instance = serializer.save(
+                response_data=sanitized_data,
+            )
 
-        return Response(valid_data.data, status=status.HTTP_201_CREATED)
+            res_serializer = ConsultaBuroResponseSerializer(instance)
+            return Response({
+                'status': status.HTTP_201_CREATED,
+                'message': 'Elemento creado',
+                'data': res_serializer.data
+            }, status=status.HTTP_201_CREATED)
 
-    return Response(valid_data.errors, status=status.HTTP_400_BAD_REQUEST)
+    except Exception as e:
+        return handle_rest_exception_helper(e)

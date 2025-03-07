@@ -291,4 +291,5 @@ EQUIFAX_SERVICE_API_URL = os.environ.get('EQUIFAX_SERVICE_API_URL')
 EQUIFAX_API_PASSWORD = os.environ.get('EQUIFAX_API_PASSWORD')
 
 REDIS_TIMEOUT = os.environ.get('REDIS_TIMEOUT')
+STAGE = os.environ.get('STAGE')
 
