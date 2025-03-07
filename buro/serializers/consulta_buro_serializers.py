@@ -14,6 +14,14 @@ class ConsultaBuroSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class ConsultaEQUIFAXSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ConsultaBuro
+        fields = [
+            'identificacion', 'tipo_identificacion', 'schema_name', 'usuario_uuid', 'empresa_uuid'
+        ]
+
+
 class ConsultarEquifaxSerializer(serializers.ModelSerializer):
     class Meta:
         model = ConsultaBuro
