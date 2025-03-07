@@ -21,3 +21,5 @@ class ConsultaBuro(AuditDateModel):
     schema_name = models.CharField(max_length=200)
     usuario_uuid = models.UUIDField()
     empresa_uuid = models.UUIDField()
+
+    valid_until = models.DateTimeField(null=True, blank=True)
