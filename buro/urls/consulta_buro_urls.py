@@ -13,6 +13,6 @@ urlpatterns = [
 
     path("equifax/", consulta_buro, name="consulta_buro-equifax"),
 
-    path("<int:pk>/", ConsultaBuroDetailView.as_view(),
+    path("<uuid:pk>/", ConsultaBuroDetailView.as_view(),
          name="consulta_buro-detail"),
 ]
