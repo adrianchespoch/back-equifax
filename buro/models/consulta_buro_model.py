@@ -15,6 +15,8 @@ class ConsultaBuro(AuditDateModel):
 
     response_data = models.JSONField(
         null=True, blank=True, default=dict)
+    raw_data = models.JSONField(
+        null=True, blank=True, default=dict)
 
     schema_name = models.CharField(max_length=200)
     usuario_uuid = models.UUIDField()

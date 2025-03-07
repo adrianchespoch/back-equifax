@@ -137,6 +137,7 @@ def consulta_buro(request):
             # guardar en la base de datos ---------------------
             instance = serializer.save(
                 response_data=sanitized_data,
+                raw_data=json_res,
             )
 
             res_serializer = ConsultaBuroResponseSerializer(instance)
