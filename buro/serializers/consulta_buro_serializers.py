@@ -15,11 +15,20 @@ class ConsultaBuroSerializer(serializers.ModelSerializer):
 
 
 class ConsultaEQUIFAXSerializer(serializers.ModelSerializer):
+    identificacion = serializers.CharField()
+
     class Meta:
         model = ConsultaBuro
         fields = [
             'identificacion', 'tipo_identificacion', 'schema_name', 'usuario_uuid', 'empresa_uuid'
         ]
+
+    def validate(self, data):
+        identificacion = data.get('identificacion')
+        if len(identificacion) < 10:
+            raise serializers.ValidationError(
+                'Identificación debe tener al menos 10 caracteres')
+        return data
 
 
 class ConsultarEquifaxSerializer(serializers.ModelSerializer):
