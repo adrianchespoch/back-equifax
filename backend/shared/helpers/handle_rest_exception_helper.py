@@ -17,6 +17,8 @@ from backend.shared.exceptions.resource_not_found_exception import (
 )
 from backend.shared.exceptions.invalid_fields_exception import InvalidFieldsException
 from backend.shared.exceptions.unauthorized_exception import UnauthorizedException
+from backend.shared.exceptions.bad_request_exception import BadRequestException
+from backend.shared.exceptions.custom_generic_exception import CustomGenericException
 
 
 def handle_rest_exception_helper(exc):
@@ -49,6 +51,18 @@ def handle_rest_exception_helper(exc):
             invalid_fields=invalid_fields,
         )
         return Response(bad_request.__dict__, status=status.HTTP_400_BAD_REQUEST)
+    elif isinstance(exc, BadRequestException):
+        bad_request = ErrorResponseDTO(
+            status=status.HTTP_400_BAD_REQUEST,
+            message=str(exc),
+        )
+        return Response(bad_request.__dict__, status=status.HTTP_400_BAD_REQUEST)
+    elif isinstance(exc, CustomGenericException):
+        error = ErrorResponseDTO(
+            status=exc.status,
+            message=str(exc),
+        )
+        return Response(error.__dict__, status=exc.status)
     else:
         print(traceback.format_exc())
         error = ErrorResponseDTO(
