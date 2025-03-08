@@ -7,6 +7,8 @@ from backend.settings import (
     EQUIFAX_API_PASSWORD,
 )
 from backend.shared.exceptions.custom_generic_exception import CustomGenericException
+from backend.shared.exceptions.bad_request_exception import BadRequestException
+from requests.exceptions import HTTPError
 
 
 class EquifaxAPIHelper:
@@ -82,14 +84,27 @@ class EquifaxAPIHelper:
                     "Authorization": f"Bearer {token}",
                 }
                 response = requests.get(url, headers=headers, timeout=36)
+                if response.status_code == 400:
+                    err_msg = response.json().get('error', 'Datos inválidos')
+                    raise BadRequestException(message=err_msg)
                 response.raise_for_status()
                 return response.json()
 
+        except HTTPError as http_err:
+            raise CustomGenericException(
+                message=f"{http_err}",
+                status=504,
+            )
         except Timeout:
             raise CustomGenericException(
                 message='El servicio de Equifax está tardando demasiado en responder, por favor intente más tarde',
                 status=504)
         except Exception as e:
+            if isinstance(e, BadRequestException):
+                raise CustomGenericException(
+                    message=f"{e}",
+                    status=400,
+                )
             raise CustomGenericException(
                 message=f"Error al obtener el score de Equifax: {e}",
                 status=504,
