@@ -21,6 +21,7 @@ class EquifaxAPIHelper:
                     "Username": EQUIFAX_API_USERNAME,
                     "Password": EQUIFAX_API_PASSWORD,
                 },
+                timeout=36,
             )
             response.raise_for_status()
             return response.json()
@@ -30,8 +31,8 @@ class EquifaxAPIHelper:
                 status=504)
         except Exception as e:
             raise CustomGenericException(
-                detail=f"Error al autenticar con el servicio de Equifax: {e}",
-                status_code=504,
+                message=f"Error al autenticar con el servicio de Equifax: {e}",
+                status=504,
             )
 
     @staticmethod
@@ -39,6 +40,7 @@ class EquifaxAPIHelper:
         try:
             response = requests.get(
                 f"{EQUIFAX_SERVICE_API_URL}/get-token",
+                timeout=36,
             )
             response.raise_for_status()
             return response.json()["token"]
@@ -48,8 +50,8 @@ class EquifaxAPIHelper:
                 status=504)
         except Exception as e:
             raise CustomGenericException(
-                detail=f"Error al autenticar con el servicio de Equifax: {e}",
-                status_code=504,
+                message=f"Error al autenticar con el servicio de Equifax: {e}",
+                status=504,
             )
 
     # ### CONSULTAS ----------------------------
@@ -68,7 +70,8 @@ class EquifaxAPIHelper:
                     "tipoDocumento": tipo_identificacion,
                     "tipoModelo": "Score Servicios",
                 }
-                response = requests.post(url, json=data, headers=headers)
+                response = requests.post(
+                    url, json=data, headers=headers, timeout=36)
                 response.raise_for_status()
                 return response.json()
             else:
@@ -78,7 +81,7 @@ class EquifaxAPIHelper:
                     "Content-Type": "application/json",
                     "Authorization": f"Bearer {token}",
                 }
-                response = requests.get(url, headers=headers)
+                response = requests.get(url, headers=headers, timeout=36)
                 response.raise_for_status()
                 return response.json()
 
@@ -88,6 +91,6 @@ class EquifaxAPIHelper:
                 status=504)
         except Exception as e:
             raise CustomGenericException(
-                detail=f"Error al obtener el score de Equifax: {e}",
-                status_code=504,
+                message=f"Error al obtener el score de Equifax: {e}",
+                status=504,
             )
