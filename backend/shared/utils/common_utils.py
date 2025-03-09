@@ -1,3 +1,4 @@
+import datetime
 import json
 import hashlib
 from django.core.cache import cache
@@ -36,3 +37,20 @@ def humanize_model_name(model_name):
 def format_params(params):
     # Convierte el diccionario de parámetros en una lista separada por comas.
     return ', '.join([f"{key} {value}" for key, value in params.items()])
+
+
+# ### CITIZEN UTILS ==========================
+def calculate_citizen_age(birth_date_str: str) -> int:
+    """
+    Calcula la edad a partir de un string de fecha en formato 'dd/MM/yyyy'.
+    Retorna 0 si el formato no es correcto.
+    """
+    try:
+        day, month, year = map(int, birth_date_str.split('/'))
+        birth_date = datetime.date(year, month, day)
+        today = datetime.date.today()
+        age = today.year - birth_date.year - \
+            ((today.month, today.day) < (birth_date.month, birth_date.day))
+        return age
+    except Exception:
+        return 0
