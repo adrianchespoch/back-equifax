@@ -61,6 +61,6 @@ urlpatterns = [
 
     path("externo-consultas/v1/consulta-buro/", include("buro.urls.consulta_buro_urls")),
 
-    path("api/v1/cedula/", include("citizen.urls.cedula_urls")),
+    path("externo-consultas/v1/cedula/", include("citizen.urls.cedula_urls")),
 
 ]
