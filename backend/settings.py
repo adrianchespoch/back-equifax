@@ -67,6 +67,7 @@ INSTALLED_APPS = [
     # own django apps
     'users',
     'buro',
+    'citizen',
 ]
 
 MIDDLEWARE = [
@@ -292,4 +293,5 @@ EQUIFAX_API_PASSWORD = os.environ.get('EQUIFAX_API_PASSWORD')
 EQUIFAX_API_INTERVAL_MESES = float(os.environ.get('EQUIFAX_API_INTERVAL_MESES', 3))
 REDIS_TIMEOUT = os.environ.get('REDIS_TIMEOUT')
 STAGE = os.environ.get('STAGE')
+REGISTRO_CIVIL_API_URL = os.environ.get('REGISTRO_CIVIL_API_URL')
 
