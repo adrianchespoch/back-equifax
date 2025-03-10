@@ -38,7 +38,6 @@ SECRET_KEY = os.environ.get('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -194,6 +193,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # ### CORS Origin
 CORS_ALLOWED_ORIGINS = os.environ.get('ALLOWED_HOSTS').split(',')
+ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS').split(',')
 
 CORS_ALLOW_CREDENTIALS = True
 
