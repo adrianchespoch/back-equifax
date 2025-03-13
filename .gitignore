@@ -198,6 +198,7 @@ notes*md
 
 # Jupyter
 .ipynb_checkpoints/
+users/management/
 
 # my command
 # users/management
